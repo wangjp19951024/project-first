@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script>
+        var ajax = {
+        // post:function(){};
+        getJSON: function(url,handler){
+            var request = new XMLHttpRequest();
+            request.open('GET',url,true);
+            request.send();
+            request.onreadystatechange = function(){
+                if(request.readyState == 4&& request.status == 200){
+                    handler.call(this,JSON.parse(request.responseText));
+                }
+            }
+        }
+        }
+        //ajax
+        var studentAPI = {
+            loadData:function(){
+                //清空数据
+                var tbody = document.getElementsByTagName('tbody')[0];
+                Array.prototype.slice.call(tbody.children,0).forEach(item){
+                    tbody.removeChild(item);
+                };
+                ajax.getJSON('http://127.0.0.1:3000/student/findAll',function(data){
+                    data.forEach(function(item){
+                         var tbody = document.getElementsByTagName('tbody')[0];
+                            var newTr = document.createElement('tr');
+                            var newTd1 = document.createElement('td');
+                            newTd1.innerText = item.id;
+                            var newTd2 = document.createElement('td');
+                            newTd2.innerText = item.name;
+                            var newTd3 = document.createElement('td');
+                            newTd3.innerText = item.gender;
+                            var newTd4 = document.createElement('td');
+                            newTd4.innerText = item.birth;
+                            var newTd5 = document.createElement('td');
+                            newTd5.innerText = item.address;
+                            newTr.appendChild(newTd1);
+                            newTr.appendChild(newTd2);
+                            newTr.appendChild(newTd3);
+                            newTr.appendChild(newTd4);
+                            newTr.appendChild(newTd5);
+                            tbody.appendChild(newTr);
+                            // if(item.id == param){
+                            //     alert('this is '+item.name);
+                            // };
+                                });
+                            });
+            }
+        };
+        window.onload = function(){
+            //更新
+             /*var formupdate = document.forms[1];
+            formupdate.onsubmit = function(event){
+                var session = formupdate.action;
+                var req = new XMLHttpRequest();
+                req.onreadystatechange = function(){
+                    if(req.readyState == 4 && req.status == 200){
+                        document.getElementsByTagName('tbody')[0].innerHTML = req.responseText;
+                    };
+                };
+                req.open('GET',session,true);
+                req.send();
+            };
+            event.preventDefault();
+*/
+
+            //查询所有
+            var form = document.forms[0];
+            var search = document.getElementById("search")
+            var param = search.value;
+            form.onsubmit = function(event){
+                //调用loaddata方法
+               studentAPI.loadData();
+                event.preventDefault();
+            }
+        }
+        //封装foreach
+        /*function updateData(param,data){
+            data.forEach(function(item){
+                var tbody = document.getElementsByTagName('tbody')[0];
+                var newTr = document.createElement('tr');
+                var newTd1 = document.createElement('td');
+                newTd1.innerText = item.id;
+                 var newTd2 = document.createElement('td');
+                newTd2.innerText = item.name;
+                 var newTd3 = document.createElement('td');
+                newTd3.innerText = item.gender;
+                 var newTd4 = document.createElement('td');
+                newTd4.innerText = item.birth;
+                 var newTd5 = document.createElement('td');
+                newTd5.innerText = item.address;
+                newTr.appendChild(newTd1);
+                newTr.appendChild(newTd2);
+                newTr.appendChild(newTd3);
+                newTr.appendChild(newTd4);
+                newTr.appendChild(newTd5);
+                tbody.appendChild(newTr);
+                if(item.id == param){
+                    alert('this is '+item.name);
+                };
+            });
+        }
+    */
+    </script>
+</head>
+<body>
+    <h2>学生管理</h2>
+    <hr>
+    <form action="student/findAll" method="
+    GET">
+        <input type="search" id="search">
+        <input type="submit">
+    </form>
+    <table>
+        <tbody>
+        <tr>
+            <td>编号</td>
+            <td>姓名</td>
+            <td>性别</td>
+            <td>出生日期</td>
+        </tr>
+        </tbody>
+    </table>
+    <form action="student/update" method="GET">
+    <input type="submit" id="update" value="update">
+    </form>
+</body>
+</html>
