@@ -17,4 +17,12 @@ studentRouter.get('/update',function(req,resp){
 studentRouter.post('/login',function(req,resp){
     resp.send('登录成功');
 });
+//修改
+studentRouter.post('/batchDelete',function(req,resp){
+    var ids = req.body;
+    // console.log(ids);
+    studentDB.deleteById(results);
+    resp.json(results);
+    // resp.send('删除成功');
+});
 module.exports = studentRouter;
